@@ -32,7 +32,8 @@ It was made open source in June 2011 and you are welcome to use it in your proje
 
 Have fun!
 
-Multiple large binary assets have been removed in this version. [github.com/rillig/sfntly](https://github.com/rillig/sfntly) is the original. Please refer to that for a richer version with all the assets.
+Multiple large binary assets have been removed here. [github.com/rillig/sfntly](https://github.com/rillig/sfntly) is the original. Please refer to that for a richer version with all the assets. This version is explicitly for
+[VolcanoSamples](https://github.com/ndsol/VolcanoSamples) which has other sources for font data.
 
 # See also
 
