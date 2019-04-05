@@ -32,7 +32,7 @@ It was made open source in June 2011 and you are welcome to use it in your proje
 
 Have fun!
 
-There are several large binary assets that have been removed in this version. [github.com/rillig/sfntly](https://github.com/rillig/sfntly) is the original. Please refer to that for a richer version with all the assets.
+Multiple large binary assets have been removed in this version. [github.com/rillig/sfntly](https://github.com/rillig/sfntly) is the original. Please refer to that for a richer version with all the assets.
 
 # See also
 
