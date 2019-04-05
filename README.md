@@ -32,6 +32,8 @@ It was made open source in June 2011 and you are welcome to use it in your proje
 
 Have fun!
 
+There are several large binary assets that have been removed in this version. Please head over to https://github.com/rillig/sfntly for a richer version.
+
 # See also
 
 * https://github.com/Jolg42/awesome-typography
