@@ -19,8 +19,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <unicode/unistr.h>
-
 #include "sfntly/font.h"
 #include "sfntly/port/exception_type.h"
 
@@ -632,6 +630,10 @@ const char* NameTable::GetEncodingName(int32_t platform_id,
 }
 
 UConverter* NameTable::GetCharset(int32_t platform_id, int32_t encoding_id) {
+#if defined(__ANDROID__) || defined(__APPLE__)
+  // Android does not allow linking against system libraries
+  return NULL;
+#else
   UErrorCode error_code = U_ZERO_ERROR;
   UConverter* conv = ucnv_open(GetEncodingName(platform_id, encoding_id),
                                &error_code);
@@ -643,6 +645,7 @@ UConverter* NameTable::GetCharset(int32_t platform_id, int32_t encoding_id) {
     ucnv_close(conv);
   }
   return NULL;
+#endif
 }
 
 void NameTable::ConvertToNameBytes(const UChar* name,
@@ -652,6 +655,15 @@ void NameTable::ConvertToNameBytes(const UChar* name,
   assert(b);
   assert(name);
   b->clear();
+#if defined(__ANDROID__) || defined(__APPLE__)
+  // Android does not allow linking against system libraries
+  int len = strlen(name) + 1;
+  b->resize(len + 3);
+  memcpy(b->data(), name, len);
+  b->data()[len] = 0;
+  b->data()[len + 1] = 0;
+  b->data()[len + 2] = 0;
+#else
   UConverter* cs = GetCharset(platform_id, encoding_id);
   if (cs == NULL) {
     return;
@@ -673,6 +685,7 @@ void NameTable::ConvertToNameBytes(const UChar* name,
     b->clear();
   }
   ucnv_close(cs);
+#endif
 }
 
 UChar* NameTable::ConvertFromNameBytes(std::vector<uint8_t>* name_bytes,
@@ -681,6 +694,13 @@ UChar* NameTable::ConvertFromNameBytes(std::vector<uint8_t>* name_bytes,
   if (name_bytes == NULL || name_bytes->size() == 0) {
     return NULL;
   }
+#if defined(__ANDROID__) || defined(__APPLE__)
+  // Android does not allow linking against system libraries
+  UChar* output_buffer = new UChar[name_bytes->size() + 1];
+  memcpy(output_buffer, name_bytes->data(), name_bytes->size());
+  output_buffer[name_bytes->size()] = 0;
+  return output_buffer;
+#else
   UConverter* cs = GetCharset(platform_id, encoding_id);
   UErrorCode error_code = U_ZERO_ERROR;
   if (cs == NULL) {
@@ -720,6 +740,7 @@ UChar* NameTable::ConvertFromNameBytes(std::vector<uint8_t>* name_bytes,
 
   delete[] output_buffer;
   return NULL;
+#endif
 }
 
 }  // namespace sfntly

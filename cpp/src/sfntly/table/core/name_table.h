@@ -20,8 +20,18 @@
 // Must include this before ICU to avoid stdint redefinition issue.
 #include "sfntly/port/type.h"
 
+#if defined(__ANDROID__) || defined(__APPLE__)
+// Android does not allow linking against system libraries.
+typedef char UChar;
+typedef int UErrorCode;
+#define U_ZERO_ERROR (0)
+typedef struct UConverter {
+} UConverter;
+#else
 #include <unicode/ucnv.h>
 #include <unicode/ustring.h>
+#include <unicode/unistr.h>
+#endif
 
 #include <map>
 #include <utility>
